@@ -1,135 +1,175 @@
-<div class="min-h-screen bg-gray-100">
-  <%= render "shared/navbar" %>
+<!-- Welcome Header -->
+<div class="mb-8">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">
+        Olá, <%= current_user.name.split.first %>! 👋
+      </h1>
+      <p class="mt-1 text-slate-500">
+        <%= I18n.l(Date.current, format: "%A, %d de %B de %Y").capitalize %>
+      </p>
+    </div>
+    <div class="mt-4 sm:mt-0">
+      <%= link_to new_appointment_path, class: "inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-medium rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all duration-200" do %>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+        Nova Consulta
+      <% end %>
+    </div>
+  </div>
+</div>
 
-  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    <%= render "shared/flash" %>
-
-    <div class="px-4 py-6 sm:px-0">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Dashboard</h2>
-
-      <!-- Stats Grid -->
-      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <!-- Patients Card -->
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Total Pacientes</dt>
-                  <dd class="text-lg font-semibold text-gray-900"><%= Patient.count rescue 0 %></dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Today's Appointments Card -->
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Consultas Hoje</dt>
-                  <dd class="text-lg font-semibold text-gray-900"><%= Appointment.where(scheduled_at: Date.current.all_day).count rescue 0 %></dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Practitioners Card -->
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Profissionais</dt>
-                  <dd class="text-lg font-semibold text-gray-900"><%= Practitioner.count rescue 0 %></dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pending Invoices Card -->
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Faturas Pendentes</dt>
-                  <dd class="text-lg font-semibold text-gray-900"><%= Invoice.pending.count rescue 0 %></dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+  <!-- Patients Card -->
+  <div class="group bg-white rounded-2xl shadow-sm hover:shadow-lg border border-slate-200/60 p-6 transition-all duration-300 hover:-translate-y-1">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm font-medium text-slate-500">Total Pacientes</p>
+        <p class="mt-2 text-3xl font-bold text-slate-900"><%= Patient.count rescue 0 %></p>
       </div>
-
-      <!-- Quick Actions -->
-      <div class="mt-8">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">Ações Rápidas</h3>
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <%= link_to new_patient_path, class: "relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400" do %>
-            <div class="flex-shrink-0">
-              <svg class="h-10 w-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-              </svg>
-            </div>
-            <div class="flex-1 min-w-0">
-              <span class="absolute inset-0" aria-hidden="true"></span>
-              <p class="text-sm font-medium text-gray-900">Novo Paciente</p>
-              <p class="text-sm text-gray-500">Cadastrar um novo paciente</p>
-            </div>
-          <% end %>
-
-          <%= link_to new_appointment_path, class: "relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400" do %>
-            <div class="flex-shrink-0">
-              <svg class="h-10 w-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-            </div>
-            <div class="flex-1 min-w-0">
-              <span class="absolute inset-0" aria-hidden="true"></span>
-              <p class="text-sm font-medium text-gray-900">Agendar Consulta</p>
-              <p class="text-sm text-gray-500">Criar novo agendamento</p>
-            </div>
-          <% end %>
-
-          <%= link_to calendar_appointments_path, class: "relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400" do %>
-            <div class="flex-shrink-0">
-              <svg class="h-10 w-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <div class="flex-1 min-w-0">
-              <span class="absolute inset-0" aria-hidden="true"></span>
-              <p class="text-sm font-medium text-gray-900">Ver Calendário</p>
-              <p class="text-sm text-gray-500">Visualizar agenda completa</p>
-            </div>
-          <% end %>
-        </div>
+      <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
+        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
       </div>
     </div>
-  </main>
+    <%= link_to patients_path, class: "mt-4 inline-flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-700 group-hover:underline" do %>
+      Ver pacientes
+      <svg class="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    <% end %>
+  </div>
+
+  <!-- Today's Appointments Card -->
+  <div class="group bg-white rounded-2xl shadow-sm hover:shadow-lg border border-slate-200/60 p-6 transition-all duration-300 hover:-translate-y-1">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm font-medium text-slate-500">Consultas Hoje</p>
+        <p class="mt-2 text-3xl font-bold text-slate-900"><%= Appointment.where(scheduled_at: Date.current.all_day).count rescue 0 %></p>
+      </div>
+      <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300">
+        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      </div>
+    </div>
+    <%= link_to appointments_path, class: "mt-4 inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 group-hover:underline" do %>
+      Ver agenda
+      <svg class="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    <% end %>
+  </div>
+
+  <!-- Practitioners Card -->
+  <div class="group bg-white rounded-2xl shadow-sm hover:shadow-lg border border-slate-200/60 p-6 transition-all duration-300 hover:-translate-y-1">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm font-medium text-slate-500">Profissionais</p>
+        <p class="mt-2 text-3xl font-bold text-slate-900"><%= Practitioner.count rescue 0 %></p>
+      </div>
+      <div class="w-12 h-12 bg-gradient-to-br from-violet-400 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/30 group-hover:scale-110 transition-transform duration-300">
+        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+    </div>
+    <% if current_user.admin? %>
+      <%= link_to practitioners_path, class: "mt-4 inline-flex items-center text-sm font-medium text-violet-600 hover:text-violet-700 group-hover:underline" do %>
+        Gerenciar
+        <svg class="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      <% end %>
+    <% else %>
+      <p class="mt-4 text-sm text-slate-400">Equipe ativa</p>
+    <% end %>
+  </div>
+
+  <!-- Pending Invoices Card -->
+  <div class="group bg-white rounded-2xl shadow-sm hover:shadow-lg border border-slate-200/60 p-6 transition-all duration-300 hover:-translate-y-1">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm font-medium text-slate-500">Faturas Pendentes</p>
+        <p class="mt-2 text-3xl font-bold text-slate-900"><%= Invoice.pending.count rescue 0 %></p>
+      </div>
+      <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform duration-300">
+        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+    </div>
+    <%= link_to invoices_path, class: "mt-4 inline-flex items-center text-sm font-medium text-amber-600 hover:text-amber-700 group-hover:underline" do %>
+      Ver faturas
+      <svg class="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    <% end %>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="mb-8">
+  <h2 class="text-lg font-semibold text-slate-900 mb-4">Ações Rápidas</h2>
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <%= link_to new_patient_path, class: "group relative bg-white rounded-2xl border border-slate-200/60 p-6 shadow-sm hover:shadow-lg hover:border-indigo-200 transition-all duration-300" do %>
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+          <svg class="h-7 w-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">Novo Paciente</h3>
+          <p class="text-sm text-slate-500">Cadastrar um novo paciente</p>
+        </div>
+      </div>
+      <div class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
+        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    <% end %>
+
+    <%= link_to new_appointment_path, class: "group relative bg-white rounded-2xl border border-slate-200/60 p-6 shadow-sm hover:shadow-lg hover:border-indigo-200 transition-all duration-300" do %>
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+          <svg class="h-7 w-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">Agendar Consulta</h3>
+          <p class="text-sm text-slate-500">Criar novo agendamento</p>
+        </div>
+      </div>
+      <div class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
+        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    <% end %>
+
+    <%= link_to calendar_appointments_path, class: "group relative bg-white rounded-2xl border border-slate-200/60 p-6 shadow-sm hover:shadow-lg hover:border-indigo-200 transition-all duration-300" do %>
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+          <svg class="h-7 w-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-slate-900 group-hover:text-emerald-600 transition-colors">Ver Calendário</h3>
+          <p class="text-sm text-slate-500">Visualizar agenda completa</p>
+        </div>
+      </div>
+      <div class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
+        <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    <% end %>
+  </div>
 </div>

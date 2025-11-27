@@ -1,10 +1,19 @@
 module ApplicationHelper
   def nav_link_class(active)
-    base_classes = "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+    base_classes = "inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200"
     if active
-      "#{base_classes} border-indigo-500 text-gray-900"
+      "#{base_classes} bg-indigo-50 text-indigo-700"
     else
-      "#{base_classes} border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+      "#{base_classes} text-slate-600 hover:text-indigo-600 hover:bg-slate-50"
+    end
+  end
+
+  def mobile_nav_link_class(active)
+    base_classes = "block pl-4 pr-4 py-3 text-base font-medium border-l-4 transition-colors"
+    if active
+      "#{base_classes} bg-indigo-50 border-indigo-500 text-indigo-700"
+    else
+      "#{base_classes} border-transparent text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800"
     end
   end
 
@@ -12,24 +21,24 @@ module ApplicationHelper
     colors = case type
     when :appointment
       {
-        "scheduled" => "bg-blue-100 text-blue-800",
-        "confirmed" => "bg-green-100 text-green-800",
-        "in_progress" => "bg-yellow-100 text-yellow-800",
-        "completed" => "bg-gray-100 text-gray-800",
-        "cancelled" => "bg-red-100 text-red-800",
-        "no_show" => "bg-purple-100 text-purple-800"
+        "scheduled" => "bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20",
+        "confirmed" => "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20",
+        "in_progress" => "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-600/20",
+        "completed" => "bg-slate-50 text-slate-700 ring-1 ring-inset ring-slate-600/20",
+        "cancelled" => "bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20",
+        "no_show" => "bg-purple-50 text-purple-700 ring-1 ring-inset ring-purple-600/20"
       }
     when :invoice
       {
-        "pending" => "bg-yellow-100 text-yellow-800",
-        "paid" => "bg-green-100 text-green-800",
-        "overdue" => "bg-red-100 text-red-800",
-        "cancelled" => "bg-gray-100 text-gray-800"
+        "pending" => "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-600/20",
+        "paid" => "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20",
+        "overdue" => "bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20",
+        "cancelled" => "bg-slate-50 text-slate-700 ring-1 ring-inset ring-slate-600/20"
       }
     end
 
     content_tag :span, status.humanize,
-      class: "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium #{colors[status]}"
+      class: "inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium #{colors[status]}"
   end
 
   def format_currency(amount)

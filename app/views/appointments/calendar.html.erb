@@ -1,36 +1,47 @@
-<div class="min-h-screen bg-gray-100">
-  <%= render "shared/navbar" %>
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+  <div>
+    <h1 class="text-2xl font-bold text-slate-800">Calendário de Consultas</h1>
+    <p class="text-slate-500 mt-1">Visualize e gerencie as consultas</p>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <%= link_to appointments_path, class: "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors" do %>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+      </svg>
+      Lista
+    <% end %>
+    <%= link_to new_appointment_path, class: "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl hover:from-indigo-600 hover:to-purple-700 shadow-lg shadow-indigo-500/30 transition-all" do %>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      Nova Consulta
+    <% end %>
+  </div>
+</div>
 
-  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    <%= render "shared/flash" %>
-
-    <div class="px-4 sm:px-0">
-      <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Calendário de Consultas</h1>
-        <div class="flex gap-2">
-          <%= link_to "Lista", appointments_path, class: "bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700" %>
-          <%= link_to "Nova Consulta", new_appointment_path, class: "bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700" %>
-        </div>
+<!-- Practitioner Filter -->
+<div class="mb-6">
+  <%= form_with url: calendar_appointments_path, method: :get, class: "bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg shadow-slate-200/50 border border-white/50 p-4" do |f| %>
+    <div class="flex flex-wrap items-center gap-4">
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+        </svg>
+        <%= f.label :practitioner_id, "Filtrar por Profissional:", class: "text-sm font-medium text-slate-700" %>
       </div>
-
-      <!-- Practitioner Filter -->
-      <div class="mb-4">
-        <%= form_with url: calendar_appointments_path, method: :get, class: "flex gap-4 items-center" do |f| %>
-          <%= f.label :practitioner_id, "Filtrar por Profissional:", class: "text-sm font-medium text-gray-700" %>
-          <%= f.collection_select :practitioner_id, @practitioners, :id, :name,
-              { include_blank: "Todos" },
-              { class: "px-3 py-2 border border-gray-300 rounded-md", onchange: "this.form.submit()" } %>
-        <% end %>
-      </div>
-
-      <!-- Calendar Container -->
-      <div class="bg-white shadow rounded-lg p-6">
-        <div id="calendar"
-             data-controller="calendar"
-             data-calendar-events-url-value="<%= calendar_appointments_path(format: :json, practitioner_id: @selected_practitioner) %>"
-             data-calendar-new-appointment-url-value="<%= new_appointment_path %>">
-        </div>
-      </div>
+      <%= f.collection_select :practitioner_id, @practitioners, :id, :name,
+          { include_blank: "Todos" },
+          { class: "px-4 py-2 border border-slate-200 rounded-xl bg-white text-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500", onchange: "this.form.submit()" } %>
     </div>
-  </main>
+  <% end %>
+</div>
+
+<!-- Calendar Container -->
+<div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg shadow-slate-200/50 border border-white/50 p-6">
+  <div id="calendar"
+       data-controller="calendar"
+       data-calendar-events-url-value="<%= calendar_appointments_path(format: :json, practitioner_id: @selected_practitioner) %>"
+       data-calendar-new-appointment-url-value="<%= new_appointment_path %>">
+  </div>
 </div>

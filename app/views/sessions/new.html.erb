@@ -1,46 +1,77 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50">
-  <div class="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
-    <div>
-      <h2 class="text-center text-3xl font-extrabold text-gray-900">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-4">
+  <div class="max-w-md w-full">
+    <!-- Logo and Header -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg shadow-indigo-500/30 mb-4">
+        <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+        </svg>
+      </div>
+      <h1 class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        Clínica App
+      </h1>
+      <p class="mt-2 text-slate-500">Sistema de Gestão de Clínica</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/60 p-8">
+      <h2 class="text-xl font-semibold text-slate-900 text-center mb-6">
         Entrar no Sistema
       </h2>
-      <p class="mt-2 text-center text-sm text-gray-600">
-        Sistema de Gestão de Clínica
-      </p>
-    </div>
 
-    <% if flash[:alert] %>
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-        <%= flash[:alert] %>
-      </div>
-    <% end %>
+      <% if flash[:alert] %>
+        <div class="mb-6 flex items-center gap-3 px-4 py-3 bg-red-50 border border-red-200 text-red-800 rounded-xl">
+          <svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p class="text-sm font-medium"><%= flash[:alert] %></p>
+        </div>
+      <% end %>
 
-    <%= form_with url: session_path, method: :post, class: "mt-8 space-y-6" do |f| %>
-      <div class="space-y-4">
+      <%= form_with url: session_path, method: :post, class: "space-y-5" do |f| %>
         <div>
-          <%= f.label :email, "Email", class: "block text-sm font-medium text-gray-700" %>
-          <%= f.email_field :email, required: true, autofocus: true,
-              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+          <%= f.label :email, "Email", class: "block text-sm font-medium text-slate-700 mb-1.5" %>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+              </svg>
+            </div>
+            <%= f.email_field :email, required: true, autofocus: true, placeholder: "seu@email.com",
+                class: "block w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" %>
+          </div>
         </div>
 
         <div>
-          <%= f.label :password, "Senha", class: "block text-sm font-medium text-gray-700" %>
-          <%= f.password_field :password, required: true,
-              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+          <%= f.label :password, "Senha", class: "block text-sm font-medium text-slate-700 mb-1.5" %>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <%= f.password_field :password, required: true, placeholder: "••••••••",
+                class: "block w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" %>
+          </div>
         </div>
-      </div>
 
-      <div>
-        <%= f.submit "Entrar",
-            class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer" %>
-      </div>
-    <% end %>
+        <div class="pt-2">
+          <%= f.submit "Entrar",
+              class: "w-full flex justify-center py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer" %>
+        </div>
+      <% end %>
 
-    <div class="text-center">
-      <p class="text-sm text-gray-600">
-        Não tem uma conta?
-        <%= link_to "Criar conta", new_registration_path, class: "font-medium text-indigo-600 hover:text-indigo-500" %>
-      </p>
+      <div class="mt-6 pt-6 border-t border-slate-100 text-center">
+        <p class="text-sm text-slate-500">
+          Não tem uma conta?
+          <%= link_to "Criar conta", new_registration_path, class: "font-medium text-indigo-600 hover:text-indigo-700 transition-colors" %>
+        </p>
+      </div>
     </div>
+
+    <!-- Footer -->
+    <p class="mt-6 text-center text-xs text-slate-400">
+      © <%= Date.current.year %> Clínica App. Todos os direitos reservados.
+    </p>
   </div>
 </div>
