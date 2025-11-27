@@ -1,0 +1,151 @@
+<div class="min-h-screen bg-gray-100">
+  <%= render "shared/navbar" %>
+
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <%= render "shared/flash" %>
+
+    <div class="px-4 sm:px-0">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Financeiro</h1>
+        <%= link_to "Nova Fatura", new_invoice_path, class: "bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700" %>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 bg-yellow-100 rounded-md p-3">
+                <svg class="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Total Pendente</dt>
+                  <dd class="text-lg font-semibold text-yellow-600"><%= format_currency(@total_pending) %></dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 bg-green-100 rounded-md p-3">
+                <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Recebido este Mês</dt>
+                  <dd class="text-lg font-semibold text-green-600"><%= format_currency(@total_paid_month) %></dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 bg-indigo-100 rounded-md p-3">
+                <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Relatórios</dt>
+                  <dd class="text-lg font-semibold text-indigo-600">
+                    <%= link_to "Ver Relatório →", financial_reports_path, class: "hover:underline" %>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <%= form_with url: invoices_path, method: :get, class: "mb-6 bg-white p-4 rounded-lg shadow" do |f| %>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div>
+            <%= f.label :patient_id, "Paciente", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.collection_select :patient_id, Patient.order(:name), :id, :name,
+                { include_blank: "Todos", selected: params[:patient_id] },
+                class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" %>
+          </div>
+          <div>
+            <%= f.label :status, "Status", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.select :status, [["Todos", ""], ["Pendentes", "pending"], ["Pagos", "paid"], ["Vencidos", "overdue"]],
+                { selected: params[:status] },
+                class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" %>
+          </div>
+          <div>
+            <%= f.label :start_date, "Data Início", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.date_field :start_date, value: params[:start_date], class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" %>
+          </div>
+          <div>
+            <%= f.label :end_date, "Data Fim", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.date_field :end_date, value: params[:end_date], class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" %>
+          </div>
+          <div class="flex items-end">
+            <%= f.submit "Filtrar", class: "bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer" %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Invoices Table -->
+      <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Paciente</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Descrição</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vencimento</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @invoices.each do |invoice| %>
+              <tr class="hover:bg-gray-50 <%= 'bg-red-50' if invoice.overdue? %>">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <%= link_to invoice.patient.name, invoice.patient, class: "text-sm font-medium text-indigo-600 hover:text-indigo-900" %>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-500">
+                  <%= truncate(invoice.description, length: 40) || "-" %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <%= l(invoice.due_date) %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <%= format_currency(invoice.amount) %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <%= status_badge(invoice.status, :invoice) %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <%= link_to "Ver", invoice, class: "text-indigo-600 hover:text-indigo-900 mr-3" %>
+                  <% if invoice.pending? %>
+                    <%= button_to "Marcar Pago", mark_paid_invoice_path(invoice), method: :patch, class: "text-green-600 hover:text-green-900 cursor-pointer" %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <% if @invoices.empty? %>
+          <div class="text-center py-12">
+            <p class="text-gray-500">Nenhuma fatura encontrada.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>

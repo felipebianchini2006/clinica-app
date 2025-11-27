@@ -1,0 +1,80 @@
+<div class="min-h-screen bg-gray-100">
+  <%= render "shared/navbar" %>
+
+  <main class="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
+    <%= render "shared/flash" %>
+
+    <div class="px-4 sm:px-0">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Fatura</h1>
+          <p class="text-gray-500">Vencimento: <%= l(@invoice.due_date) %></p>
+        </div>
+        <div class="flex gap-2">
+          <%= link_to "Editar", edit_invoice_path(@invoice), class: "bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700" %>
+          <% if @invoice.pending? %>
+            <%= button_to "Marcar como Pago", mark_paid_invoice_path(@invoice), method: :patch, class: "bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 cursor-pointer" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="p-6 space-y-6">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Status:</span>
+            <%= status_badge(@invoice.status, :invoice) %>
+          </div>
+
+          <dl class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Paciente</dt>
+              <dd class="mt-1">
+                <%= link_to @invoice.patient.name, @invoice.patient, class: "text-indigo-600 hover:text-indigo-900" %>
+              </dd>
+            </div>
+
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Valor</dt>
+              <dd class="mt-1 text-2xl font-bold text-gray-900"><%= format_currency(@invoice.amount) %></dd>
+            </div>
+
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Vencimento</dt>
+              <dd class="mt-1 text-gray-900"><%= l(@invoice.due_date) %></dd>
+            </div>
+
+            <% if @invoice.paid_at %>
+              <div>
+                <dt class="text-sm font-medium text-gray-500">Data do Pagamento</dt>
+                <dd class="mt-1 text-gray-900"><%= l(@invoice.paid_at, format: :long) %></dd>
+              </div>
+            <% end %>
+
+            <% if @invoice.appointment %>
+              <div>
+                <dt class="text-sm font-medium text-gray-500">Consulta Relacionada</dt>
+                <dd class="mt-1">
+                  <%= link_to l(@invoice.appointment.scheduled_at, format: :short), @invoice.appointment, class: "text-indigo-600 hover:text-indigo-900" %>
+                </dd>
+              </div>
+            <% end %>
+
+            <% if @invoice.description.present? %>
+              <div class="md:col-span-2">
+                <dt class="text-sm font-medium text-gray-500">Descrição</dt>
+                <dd class="mt-1 text-gray-900"><%= simple_format(@invoice.description) %></dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-between">
+        <%= link_to "← Voltar", invoices_path, class: "text-gray-600 hover:text-gray-900" %>
+        <%= button_to "Excluir", @invoice, method: :delete,
+            data: { turbo_confirm: "Tem certeza que deseja excluir esta fatura?" },
+            class: "text-red-600 hover:text-red-800 cursor-pointer" %>
+      </div>
+    </div>
+  </main>
+</div>

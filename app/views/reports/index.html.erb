@@ -1,0 +1,41 @@
+<div class="min-h-screen bg-gray-100">
+  <%= render "shared/navbar" %>
+
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <%= render "shared/flash" %>
+
+    <div class="px-4 sm:px-0">
+      <h1 class="text-2xl font-bold text-gray-900 mb-6">Relatórios</h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <%= link_to financial_reports_path, class: "bg-white shadow rounded-lg p-6 hover:shadow-md transition-shadow" do %>
+          <div class="flex items-center">
+            <div class="flex-shrink-0 bg-green-100 rounded-md p-3">
+              <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="ml-5">
+              <h3 class="text-lg font-medium text-gray-900">Relatório Financeiro</h3>
+              <p class="text-sm text-gray-500">Receitas, pendências e análise por profissional</p>
+            </div>
+          </div>
+        <% end %>
+
+        <%= link_to export_reports_path(start_date: @start_date, end_date: @end_date, format: :csv), class: "bg-white shadow rounded-lg p-6 hover:shadow-md transition-shadow" do %>
+          <div class="flex items-center">
+            <div class="flex-shrink-0 bg-indigo-100 rounded-md p-3">
+              <svg class="h-8 w-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div class="ml-5">
+              <h3 class="text-lg font-medium text-gray-900">Exportar Dados</h3>
+              <p class="text-sm text-gray-500">Download CSV do mês atual</p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>

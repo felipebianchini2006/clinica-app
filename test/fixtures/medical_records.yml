@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+maria_prontuario:
+  diagnosis: Hipertensão arterial leve controlada
+  treatment: Manter uso de Losartana 50mg 1x/dia. Dieta hipossódica.
+  notes: Paciente apresenta boa adesão ao tratamento. PA 130x80.
+  patient: maria
+  practitioner: dr_carlos
+  appointment: maria_consulta_passada
+
+joao_prontuario:
+  diagnosis: Diabetes Mellitus Tipo 2
+  treatment: Metformina 850mg 2x/dia. Dieta com restrição de carboidratos.
+  notes: Glicemia de jejum 110mg/dL. Hemoglobina glicada 6.8%.
+  patient: joao
+  practitioner: dr_carlos
+  appointment: joao_consulta

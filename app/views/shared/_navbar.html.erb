@@ -1,0 +1,28 @@
+<nav class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex">
+        <div class="flex-shrink-0 flex items-center">
+          <%= link_to "Clínica App", root_path, class: "text-xl font-bold text-indigo-600" %>
+        </div>
+        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+          <%= link_to "Dashboard", root_path, class: nav_link_class(controller_name == "dashboard") %>
+          <%= link_to "Pacientes", patients_path, class: nav_link_class(controller_name == "patients") %>
+          <%= link_to "Agenda", appointments_path, class: nav_link_class(controller_name == "appointments") %>
+          <%= link_to "Prontuários", medical_records_path, class: nav_link_class(controller_name == "medical_records") %>
+          <%= link_to "Financeiro", invoices_path, class: nav_link_class(controller_name == "invoices") %>
+          <% if current_user.admin? %>
+            <%= link_to "Profissionais", practitioners_path, class: nav_link_class(controller_name == "practitioners") %>
+            <%= link_to "Relatórios", reports_path, class: nav_link_class(controller_name == "reports") %>
+          <% end %>
+        </div>
+      </div>
+      <div class="flex items-center">
+        <span class="text-sm text-gray-500 mr-4">
+          <%= current_user.name %> (<%= current_user.role.humanize %>)
+        </span>
+        <%= button_to "Sair", session_path, method: :delete, class: "text-sm text-red-600 hover:text-red-800 cursor-pointer" %>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,56 @@
+<%= form_with model: @appointment, class: "space-y-6" do |f| %>
+  <% if @appointment.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <ul class="list-disc list-inside">
+        <% @appointment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <%= f.label :patient_id, "Paciente *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :patient_id, @patients, :id, :name, { prompt: "Selecione um paciente" },
+          { required: true, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" } %>
+    </div>
+
+    <div>
+      <%= f.label :practitioner_id, "Profissional *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :practitioner_id, @practitioners, :id, :name, { prompt: "Selecione um profissional" },
+          { required: true, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" } %>
+    </div>
+
+    <div>
+      <%= f.label :scheduled_at, "Data e Hora *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.datetime_local_field :scheduled_at, required: true,
+          class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <div>
+      <%= f.label :duration_minutes, "Duração (minutos)", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.number_field :duration_minutes, value: @appointment.duration_minutes || 30, min: 15, step: 15,
+          class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <% if @appointment.persisted? %>
+      <div>
+        <%= f.label :status, "Status", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.select :status, Appointment.statuses.keys.map { |s| [s.humanize, s] },
+            {},
+            { class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" } %>
+      </div>
+    <% end %>
+
+    <div class="md:col-span-2">
+      <%= f.label :notes, "Observações", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :notes, rows: 3, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-4">
+    <%= link_to "Cancelar", appointments_path, class: "px-4 py-2 text-gray-700 hover:text-gray-900" %>
+    <%= f.submit class: "bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 cursor-pointer" %>
+  </div>
+<% end %>

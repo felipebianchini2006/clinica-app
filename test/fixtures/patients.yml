@@ -1,0 +1,28 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+maria:
+  name: Maria Silva Santos
+  cpf: 12345678901
+  birth_date: 1985-03-15
+  phone: "(11) 98765-4321"
+  email: maria.silva@email.com
+  address: Rua das Flores, 123 - São Paulo/SP
+  notes: Alergia a dipirona
+
+joao:
+  name: João Carlos Oliveira
+  cpf: 98765432100
+  birth_date: 1970-08-22
+  phone: "(11) 91234-5678"
+  email: joao.oliveira@email.com
+  address: Av. Brasil, 456 - São Paulo/SP
+  notes: Diabético tipo 2
+
+ana:
+  name: Ana Paula Costa
+  cpf: 45678912300
+  birth_date: 1992-11-30
+  phone: "(11) 99876-5432"
+  email: ana.costa@email.com
+  address: Rua Augusta, 789 - São Paulo/SP
+  notes: Gestante - 6 meses

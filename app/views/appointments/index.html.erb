@@ -1,0 +1,94 @@
+<div class="min-h-screen bg-gray-100">
+  <%= render "shared/navbar" %>
+
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <%= render "shared/flash" %>
+
+    <div class="px-4 sm:px-0">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Agenda</h1>
+        <div class="flex gap-2">
+          <%= link_to "Calendário", calendar_appointments_path, class: "bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700" %>
+          <%= link_to "Nova Consulta", new_appointment_path, class: "bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700" %>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <%= form_with url: appointments_path, method: :get, class: "mb-6 bg-white p-4 rounded-lg shadow" do |f| %>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <%= f.label :practitioner_id, "Profissional", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.collection_select :practitioner_id, Practitioner.order(:name), :id, :name,
+                { include_blank: "Todos" },
+                class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" %>
+          </div>
+          <div>
+            <%= f.label :start_date, "Data Início", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.date_field :start_date, value: params[:start_date], class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" %>
+          </div>
+          <div>
+            <%= f.label :end_date, "Data Fim", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.date_field :end_date, value: params[:end_date], class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" %>
+          </div>
+          <div class="flex items-end">
+            <%= f.submit "Filtrar", class: "bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer" %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Quick Filters -->
+      <div class="mb-4 flex gap-2">
+        <%= link_to "Hoje", appointments_path(today: true), class: "px-3 py-1 rounded-full text-sm #{params[:today] ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}" %>
+        <%= link_to "Próximas", appointments_path(upcoming: true), class: "px-3 py-1 rounded-full text-sm #{params[:upcoming] ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}" %>
+        <%= link_to "Todas", appointments_path, class: "px-3 py-1 rounded-full text-sm #{!params[:today] && !params[:upcoming] ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}" %>
+      </div>
+
+      <!-- Appointments Table -->
+      <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data/Hora</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Paciente</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Profissional</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Duração</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @appointments.each do |appointment| %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <%= l(appointment.scheduled_at, format: :short) %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <%= link_to appointment.patient.name, appointment.patient, class: "text-sm font-medium text-indigo-600 hover:text-indigo-900" %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <%= appointment.practitioner.name %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <%= appointment.duration_minutes %> min
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <%= status_badge(appointment.status, :appointment) %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <%= link_to "Ver", appointment, class: "text-indigo-600 hover:text-indigo-900 mr-3" %>
+                  <%= link_to "Editar", edit_appointment_path(appointment), class: "text-gray-600 hover:text-gray-900" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <% if @appointments.empty? %>
+          <div class="text-center py-12">
+            <p class="text-gray-500">Nenhuma consulta encontrada.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>

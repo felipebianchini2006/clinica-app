@@ -1,0 +1,104 @@
+<div class="min-h-screen bg-gray-100">
+  <%= render "shared/navbar" %>
+
+  <main class="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
+    <%= render "shared/flash" %>
+
+    <div class="px-4 sm:px-0">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Consulta</h1>
+          <p class="text-gray-500"><%= l(@appointment.scheduled_at, format: :long) %></p>
+        </div>
+        <div class="flex gap-2">
+          <%= link_to "Editar", edit_appointment_path(@appointment), class: "bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700" %>
+          <% unless @appointment.medical_record %>
+            <%= link_to "Criar Prontuário", new_medical_record_path(patient_id: @appointment.patient_id, appointment_id: @appointment.id), class: "bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="bg-white shadow rounded-lg p-6 space-y-6">
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-gray-500">Status:</span>
+          <%= status_badge(@appointment.status, :appointment) %>
+        </div>
+
+        <dl class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <dt class="text-sm font-medium text-gray-500">Paciente</dt>
+            <dd class="mt-1">
+              <%= link_to @appointment.patient.name, @appointment.patient, class: "text-indigo-600 hover:text-indigo-900" %>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="text-sm font-medium text-gray-500">Profissional</dt>
+            <dd class="mt-1 text-gray-900"><%= @appointment.practitioner.name %></dd>
+          </div>
+
+          <div>
+            <dt class="text-sm font-medium text-gray-500">Data e Hora</dt>
+            <dd class="mt-1 text-gray-900"><%= l(@appointment.scheduled_at, format: :long) %></dd>
+          </div>
+
+          <div>
+            <dt class="text-sm font-medium text-gray-500">Duração</dt>
+            <dd class="mt-1 text-gray-900"><%= @appointment.duration_minutes %> minutos</dd>
+          </div>
+
+          <% if @appointment.notes.present? %>
+            <div class="md:col-span-2">
+              <dt class="text-sm font-medium text-gray-500">Observações</dt>
+              <dd class="mt-1 text-gray-900"><%= simple_format(@appointment.notes) %></dd>
+            </div>
+          <% end %>
+        </dl>
+
+        <% if @appointment.medical_record %>
+          <div class="border-t pt-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Prontuário</h3>
+            <%= link_to @appointment.medical_record, class: "block bg-gray-50 p-4 rounded hover:bg-gray-100" do %>
+              <p class="font-medium text-gray-900"><%= truncate(@appointment.medical_record.diagnosis, length: 100) %></p>
+              <p class="text-sm text-gray-500 mt-1">Criado em <%= l(@appointment.medical_record.created_at, format: :short) %></p>
+            <% end %>
+          </div>
+        <% end %>
+
+        <% if @appointment.invoice %>
+          <div class="border-t pt-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Fatura</h3>
+            <%= link_to @appointment.invoice, class: "block bg-gray-50 p-4 rounded hover:bg-gray-100" do %>
+              <div class="flex justify-between items-center">
+                <span class="font-medium text-gray-900"><%= format_currency(@appointment.invoice.amount) %></span>
+                <%= status_badge(@appointment.invoice.status, :invoice) %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+        <!-- Status Actions -->
+        <div class="border-t pt-6">
+          <h3 class="text-sm font-medium text-gray-500 mb-3">Alterar Status</h3>
+          <div class="flex flex-wrap gap-2">
+            <% Appointment.statuses.keys.each do |status| %>
+              <% unless status == @appointment.status %>
+                <%= button_to status.humanize,
+                    appointment_path(@appointment, appointment: { status: status }),
+                    method: :patch,
+                    class: "px-3 py-1 rounded text-sm bg-gray-200 hover:bg-gray-300 cursor-pointer" %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-between">
+        <%= link_to "← Voltar", appointments_path, class: "text-gray-600 hover:text-gray-900" %>
+        <%= button_to "Excluir", @appointment, method: :delete,
+            data: { turbo_confirm: "Tem certeza que deseja excluir esta consulta?" },
+            class: "text-red-600 hover:text-red-800 cursor-pointer" %>
+      </div>
+    </div>
+  </main>
+</div>

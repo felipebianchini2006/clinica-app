@@ -1,0 +1,73 @@
+<%= form_with model: @medical_record, class: "space-y-6" do |f| %>
+  <% if @medical_record.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <ul class="list-disc list-inside">
+        <% @medical_record.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <%= f.label :patient_id, "Paciente *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :patient_id, @patients, :id, :name, { prompt: "Selecione um paciente" },
+          { required: true, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" } %>
+    </div>
+
+    <div>
+      <%= f.label :practitioner_id, "Profissional *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :practitioner_id, @practitioners, :id, :name, { prompt: "Selecione um profissional" },
+          { required: true, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" } %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :diagnosis, "Diagnóstico *", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :diagnosis, required: true, rows: 4,
+        placeholder: "Descreva o diagnóstico do paciente...",
+        class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+  </div>
+
+  <div>
+    <%= f.label :treatment, "Tratamento", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :treatment, rows: 4,
+        placeholder: "Descreva o tratamento prescrito...",
+        class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+  </div>
+
+  <div>
+    <%= f.label :notes, "Observações", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :notes, rows: 3,
+        placeholder: "Observações adicionais...",
+        class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+  </div>
+
+  <div>
+    <%= f.label :attachments, "Anexos (exames, imagens, documentos)", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.file_field :attachments, multiple: true,
+        accept: "image/*,.pdf,.doc,.docx",
+        class: "mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" %>
+    <p class="mt-1 text-xs text-gray-500">Aceita imagens, PDFs e documentos Word. Múltiplos arquivos permitidos.</p>
+
+    <% if @medical_record.attachments.attached? %>
+      <div class="mt-4">
+        <p class="text-sm font-medium text-gray-700 mb-2">Anexos atuais:</p>
+        <ul class="space-y-1">
+          <% @medical_record.attachments.each do |attachment| %>
+            <li class="flex items-center justify-between bg-gray-50 px-3 py-2 rounded">
+              <span class="text-sm text-gray-600"><%= attachment.filename %></span>
+              <%= link_to "Remover", rails_blob_path(attachment), method: :delete, class: "text-red-600 text-sm hover:text-red-800" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="flex justify-end gap-4">
+    <%= link_to "Cancelar", medical_records_path, class: "px-4 py-2 text-gray-700 hover:text-gray-900" %>
+    <%= f.submit class: "bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 cursor-pointer" %>
+  </div>
+<% end %>

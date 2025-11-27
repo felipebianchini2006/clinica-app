@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+dr_carlos:
+  name: Dr. Carlos Eduardo Mendes
+  specialty: Clínica Geral
+  crm: CRM-SP 123456
+  phone: "(11) 3456-7890"
+  user: doctor_carlos
+
+dra_patricia:
+  name: Dra. Patrícia Lima
+  specialty: Pediatria
+  crm: CRM-SP 654321
+  phone: "(11) 3456-7891"
+  user: doctor_patricia

@@ -1,0 +1,48 @@
+<%= form_with model: @practitioner, class: "space-y-6" do |f| %>
+  <% if @practitioner.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <ul class="list-disc list-inside">
+        <% @practitioner.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <%= f.label :name, "Nome *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :name, required: true, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <div>
+      <%= f.label :crm, "CRM *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :crm, required: true, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <div>
+      <%= f.label :specialty, "Especialidade *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :specialty, required: true, placeholder: "Ex: Clínico Geral, Cardiologista...",
+          class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <div>
+      <%= f.label :phone, "Telefone", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :phone, placeholder: "(00) 00000-0000",
+          class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <div class="md:col-span-2">
+      <%= f.label :user_id, "Usuário do Sistema (opcional)", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :user_id, User.practitioner.order(:name), :id, ->(u) { "#{u.name} (#{u.email})" },
+          { include_blank: "Nenhum" },
+          { class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" } %>
+      <p class="mt-1 text-xs text-gray-500">Vincule a um usuário com perfil "practitioner" para acesso ao sistema.</p>
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-4">
+    <%= link_to "Cancelar", practitioners_path, class: "px-4 py-2 text-gray-700 hover:text-gray-900" %>
+    <%= f.submit class: "bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 cursor-pointer" %>
+  </div>
+<% end %>

@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+admin:
+  email: admin@clinica.com
+  password_digest: <%= BCrypt::Password.create('password123') %>
+  role: admin
+  name: Administrador Sistema
+
+doctor_carlos:
+  email: carlos@clinica.com
+  password_digest: <%= BCrypt::Password.create('password123') %>
+  role: practitioner
+  name: Dr. Carlos Eduardo Mendes
+
+doctor_patricia:
+  email: patricia@clinica.com
+  password_digest: <%= BCrypt::Password.create('password123') %>
+  role: practitioner
+  name: Dra. Patrícia Lima
+
+receptionist:
+  email: recepcao@clinica.com
+  password_digest: <%= BCrypt::Password.create('password123') %>
+  role: receptionist
+  name: Maria Santos Recepção

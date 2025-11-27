@@ -1,0 +1,162 @@
+<div class="min-h-screen bg-gray-100">
+  <%= render "shared/navbar" %>
+
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <%= render "shared/flash" %>
+
+    <div class="px-4 sm:px-0">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Relatório Financeiro</h1>
+        <%= link_to "Exportar CSV", export_reports_path(start_date: @start_date, end_date: @end_date, format: :csv), class: "bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700" %>
+      </div>
+
+      <!-- Date Filter -->
+      <%= form_with url: financial_reports_path, method: :get, class: "mb-6 bg-white p-4 rounded-lg shadow" do |f| %>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <%= f.label :start_date, "Data Início", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.date_field :start_date, value: @start_date, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" %>
+          </div>
+          <div>
+            <%= f.label :end_date, "Data Fim", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.date_field :end_date, value: @end_date, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" %>
+          </div>
+          <div class="flex items-end">
+            <%= f.submit "Atualizar", class: "bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 cursor-pointer" %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 bg-green-100 rounded-md p-3">
+                <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Receita Total</dt>
+                  <dd class="text-lg font-semibold text-green-600"><%= format_currency(@total_revenue) %></dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 bg-yellow-100 rounded-md p-3">
+                <svg class="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Pendente</dt>
+                  <dd class="text-lg font-semibold text-yellow-600"><%= format_currency(@total_pending) %></dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 bg-red-100 rounded-md p-3">
+                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Vencido</dt>
+                  <dd class="text-lg font-semibold text-red-600"><%= format_currency(@total_overdue) %></dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 bg-indigo-100 rounded-md p-3">
+                <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Consultas</dt>
+                  <dd class="text-lg font-semibold text-indigo-600"><%= @appointments_count %></dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Revenue by Practitioner -->
+        <div class="bg-white shadow rounded-lg p-6">
+          <h2 class="text-lg font-medium text-gray-900 mb-4">Receita por Profissional</h2>
+          <% if @revenue_by_practitioner.any? %>
+            <table class="min-w-full">
+              <thead>
+                <tr>
+                  <th class="text-left text-xs font-medium text-gray-500 uppercase pb-2">Profissional</th>
+                  <th class="text-right text-xs font-medium text-gray-500 uppercase pb-2">Valor</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <% @revenue_by_practitioner.each do |name, amount| %>
+                  <tr>
+                    <td class="py-3 text-sm text-gray-900"><%= name %></td>
+                    <td class="py-3 text-sm text-gray-900 text-right font-medium"><%= format_currency(amount) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            <p class="text-gray-500 text-center py-4">Nenhum dado disponível para o período.</p>
+          <% end %>
+        </div>
+
+        <!-- Appointments Summary -->
+        <div class="bg-white shadow rounded-lg p-6">
+          <h2 class="text-lg font-medium text-gray-900 mb-4">Resumo de Consultas</h2>
+          <dl class="space-y-4">
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Total de Consultas</dt>
+              <dd class="text-sm font-medium text-gray-900"><%= @appointments_count %></dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Consultas Realizadas</dt>
+              <dd class="text-sm font-medium text-green-600"><%= @completed_appointments %></dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Consultas Canceladas</dt>
+              <dd class="text-sm font-medium text-red-600"><%= @cancelled_appointments %></dd>
+            </div>
+            <% if @appointments_count > 0 %>
+              <div class="flex justify-between border-t pt-4">
+                <dt class="text-sm text-gray-500">Taxa de Realização</dt>
+                <dd class="text-sm font-medium text-gray-900"><%= number_to_percentage((@completed_appointments.to_f / @appointments_count) * 100, precision: 1) %></dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <%= link_to "← Voltar ao Financeiro", invoices_path, class: "text-gray-600 hover:text-gray-900" %>
+      </div>
+    </div>
+  </main>
+</div>

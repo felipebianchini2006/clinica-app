@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+maria_consulta:
+  scheduled_at: <%= 1.day.from_now.change(hour: 9, min: 0) %>
+  duration_minutes: 30
+  status: scheduled
+  notes: Retorno de rotina
+  patient: maria
+  practitioner: dr_carlos
+
+joao_consulta:
+  scheduled_at: <%= 1.day.from_now.change(hour: 10, min: 0) %>
+  duration_minutes: 45
+  status: confirmed
+  notes: Acompanhamento diabetes
+  patient: joao
+  practitioner: dr_carlos
+
+ana_consulta:
+  scheduled_at: <%= 2.days.from_now.change(hour: 14, min: 0) %>
+  duration_minutes: 30
+  status: scheduled
+  notes: Pré-natal
+  patient: ana
+  practitioner: dra_patricia
+
+maria_consulta_passada:
+  scheduled_at: <%= 7.days.ago.change(hour: 9, min: 0) %>
+  duration_minutes: 30
+  status: completed
+  notes: Consulta de rotina realizada
+  patient: maria
+  practitioner: dr_carlos

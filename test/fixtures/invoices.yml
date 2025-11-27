@@ -1,0 +1,28 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+maria_fatura_paga:
+  amount: 250.00
+  status: paid
+  due_date: <%= 5.days.ago.to_date %>
+  paid_at: <%= 5.days.ago %>
+  description: Consulta clínica geral
+  patient: maria
+  appointment: maria_consulta_passada
+
+joao_fatura_pendente:
+  amount: 300.00
+  status: pending
+  due_date: <%= 3.days.from_now.to_date %>
+  paid_at: 
+  description: Consulta + exames de rotina
+  patient: joao
+  appointment: joao_consulta
+
+ana_fatura_atrasada:
+  amount: 180.00
+  status: pending
+  due_date: <%= 2.days.ago.to_date %>
+  paid_at: 
+  description: Consulta pré-natal
+  patient: ana
+  appointment: ana_consulta

@@ -1,0 +1,53 @@
+<%= form_with model: @patient, class: "space-y-6" do |f| %>
+  <% if @patient.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <ul class="list-disc list-inside">
+        <% @patient.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <%= f.label :name, "Nome *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :name, required: true, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <div>
+      <%= f.label :cpf, "CPF *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :cpf, required: true, placeholder: "000.000.000-00", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <div>
+      <%= f.label :birth_date, "Data de Nascimento", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.date_field :birth_date, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <div>
+      <%= f.label :phone, "Telefone", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :phone, placeholder: "(00) 00000-0000", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <div class="md:col-span-2">
+      <%= f.label :email, "Email", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.email_field :email, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <div class="md:col-span-2">
+      <%= f.label :address, "Endereço", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :address, rows: 2, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <div class="md:col-span-2">
+      <%= f.label :notes, "Observações", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :notes, rows: 3, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-4">
+    <%= link_to "Cancelar", patients_path, class: "px-4 py-2 text-gray-700 hover:text-gray-900" %>
+    <%= f.submit class: "bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 cursor-pointer" %>
+  </div>
+<% end %>

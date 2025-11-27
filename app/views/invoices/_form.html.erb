@@ -1,0 +1,64 @@
+<%= form_with model: @invoice, class: "space-y-6" do |f| %>
+  <% if @invoice.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <ul class="list-disc list-inside">
+        <% @invoice.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <%= f.label :patient_id, "Paciente *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :patient_id, @patients, :id, :name, { prompt: "Selecione um paciente" },
+          { required: true, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" } %>
+    </div>
+
+    <div>
+      <%= f.label :appointment_id, "Consulta (opcional)", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :appointment_id, @appointments, :id, ->(a) { "#{a.patient.name} - #{l(a.scheduled_at, format: :short)}" },
+          { include_blank: "Nenhuma" },
+          { class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" } %>
+    </div>
+
+    <div>
+      <%= f.label :amount, "Valor *", class: "block text-sm font-medium text-gray-700" %>
+      <div class="mt-1 relative rounded-md shadow-sm">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <span class="text-gray-500 sm:text-sm">R$</span>
+        </div>
+        <%= f.number_field :amount, required: true, step: 0.01, min: 0,
+            class: "block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" %>
+      </div>
+    </div>
+
+    <div>
+      <%= f.label :due_date, "Data de Vencimento *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.date_field :due_date, required: true,
+          class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+
+    <% if @invoice.persisted? %>
+      <div>
+        <%= f.label :status, "Status", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.select :status, Invoice.statuses.keys.map { |s| [s.humanize, s] },
+            {},
+            { class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" } %>
+      </div>
+    <% end %>
+
+    <div class="md:col-span-2">
+      <%= f.label :description, "Descrição", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :description, rows: 3,
+          placeholder: "Descrição dos serviços prestados...",
+          class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-4">
+    <%= link_to "Cancelar", invoices_path, class: "px-4 py-2 text-gray-700 hover:text-gray-900" %>
+    <%= f.submit class: "bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 cursor-pointer" %>
+  </div>
+<% end %>

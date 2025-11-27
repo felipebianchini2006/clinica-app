@@ -1,0 +1,105 @@
+<div class="min-h-screen bg-gray-100">
+  <%= render "shared/navbar" %>
+
+  <main class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+    <%= render "shared/flash" %>
+
+    <div class="px-4 sm:px-0">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Prontuário</h1>
+          <p class="text-gray-500">Criado em <%= l(@medical_record.created_at, format: :long) %></p>
+        </div>
+        <div class="flex gap-2">
+          <%= link_to "Editar", edit_medical_record_path(@medical_record), class: "bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700" %>
+        </div>
+      </div>
+
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <!-- Patient & Practitioner Info -->
+        <div class="bg-gray-50 px-6 py-4 border-b">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <span class="text-sm text-gray-500">Paciente:</span>
+              <%= link_to @medical_record.patient.name, @medical_record.patient, class: "ml-2 text-indigo-600 hover:text-indigo-900 font-medium" %>
+            </div>
+            <div>
+              <span class="text-sm text-gray-500">Profissional:</span>
+              <span class="ml-2 text-gray-900"><%= @medical_record.practitioner.name %></span>
+            </div>
+          </div>
+          <% if @medical_record.appointment %>
+            <div class="mt-2">
+              <span class="text-sm text-gray-500">Consulta:</span>
+              <%= link_to l(@medical_record.appointment.scheduled_at, format: :short), @medical_record.appointment, class: "ml-2 text-indigo-600 hover:text-indigo-900" %>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6 space-y-6">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Diagnóstico</h3>
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <%= simple_format(@medical_record.diagnosis, class: "text-gray-800") %>
+            </div>
+          </div>
+
+          <% if @medical_record.treatment.present? %>
+            <div>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">Tratamento</h3>
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <%= simple_format(@medical_record.treatment, class: "text-gray-800") %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if @medical_record.notes.present? %>
+            <div>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">Observações</h3>
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <%= simple_format(@medical_record.notes, class: "text-gray-800") %>
+              </div>
+            </div>
+          <% end %>
+
+          <!-- Attachments -->
+          <% if @medical_record.attachments.attached? %>
+            <div>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">Anexos (<%= @medical_record.attachments.count %>)</h3>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <% @medical_record.attachments.each do |attachment| %>
+                  <div class="border rounded-lg p-3 hover:bg-gray-50">
+                    <% if attachment.image? %>
+                      <%= link_to rails_blob_path(attachment, disposition: "inline"), target: "_blank", class: "block" do %>
+                        <%= image_tag attachment.variant(resize_to_limit: [200, 200]), class: "rounded mb-2" %>
+                        <p class="text-sm text-gray-600 truncate"><%= attachment.filename %></p>
+                      <% end %>
+                    <% else %>
+                      <%= link_to rails_blob_path(attachment, disposition: "attachment"), class: "block" do %>
+                        <div class="h-20 bg-gray-100 rounded flex items-center justify-center mb-2">
+                          <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                        <p class="text-sm text-gray-600 truncate"><%= attachment.filename %></p>
+                        <p class="text-xs text-gray-400"><%= number_to_human_size(attachment.byte_size) %></p>
+                      <% end %>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-between">
+        <%= link_to "← Voltar", medical_records_path, class: "text-gray-600 hover:text-gray-900" %>
+        <%= button_to "Excluir", @medical_record, method: :delete,
+            data: { turbo_confirm: "Tem certeza que deseja excluir este prontuário?" },
+            class: "text-red-600 hover:text-red-800 cursor-pointer" %>
+      </div>
+    </div>
+  </main>
+</div>

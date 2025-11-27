@@ -1,0 +1,6 @@
+<%- headers["Content-Type"] = "text/csv; charset=utf-8" -%>
+<%= "\uFEFF" %><%# BOM for Excel UTF-8 compatibility -%>
+ID,Paciente,CPF,Descrição,Valor,Vencimento,Status,Data Pagamento
+<% @invoices.each do |invoice| -%>
+<%= invoice.id %>,<%= invoice.patient.name %>,<%= invoice.patient.formatted_cpf %>,<%= invoice.description&.gsub(/[\r\n]/, ' ') %>,<%= invoice.amount %>,<%= invoice.due_date %>,<%= invoice.status %>,<%= invoice.paid_at&.strftime('%Y-%m-%d %H:%M') %>
+<% end -%>
