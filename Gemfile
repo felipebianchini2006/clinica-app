@@ -23,6 +23,9 @@ gem "bcrypt", "~> 3.1.7"
 # Authorization [https://github.com/varvet/pundit]
 gem "pundit"
 
+# Pagination [https://github.com/kaminari/kaminari]
+gem "kaminari"
+
 # Tailwind CSS for Rails [https://github.com/rails/tailwindcss-rails]
 gem "tailwindcss-rails"
 
